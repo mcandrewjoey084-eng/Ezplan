@@ -12,11 +12,109 @@ body{margin:0;font-family:Arial,sans-serif;background:#f5f7fb;color:#172033}head
 <section id="planner"><h2>My Homework Planner</h2><div class="planner"><div class="add"><input id="name" placeholder="Assignment"><input id="class" placeholder="Class"><input id="date" type="date"><button class="btn" onclick="add()">Add</button></div><div id="list"></div></div></section>
 <footer>© 2026 EzPlan · Independent student project</footer>
 <script>
-let tasks=JSON.parse(localStorage.getItem('ezplan')||'[]');
-function save(){localStorage.setItem('ezplan',JSON.stringify(tasks));render()}
-function add(){let n=name.value.trim();if(!n)return;tasks.push({n,c:document.getElementById('class').value||'School',d:date.value,x:false});name.value='';document.getElementById('class').value='';date.value='';save()}
-function toggle(i){tasks[i].x=!tasks[i].x;save()}
-function del(i){tasks.splice(i,1);save()}
-function render(){list.innerHTML=tasks.length?tasks.map((t,i)=>`<div class="task"><input type="checkbox" ${t.x?'checked':''} onchange="toggle(${i})"><span class="${t.x?'done':''}"><b>${t.n}</b><br><small>${t.c}${t.d?' · Due '+t.d:''}</small></span><button onclick="del(${i})" style="margin-left:auto;border:0;background:none;color:#999">Remove</button></div>`).join(''):'<p style="text-align:center;color:#888">No assignments yet — add your first one!</p>'}
+
+let tasks = JSON.parse(localStorage.getItem('ezplan') || '[]');
+
+const nameInput = document.getElementById('name');
+
+const classInput = document.getElementById('class');
+
+const dateInput = document.getElementById('date');
+
+const list = document.getElementById('list');
+
+function save() {
+
+  localStorage.setItem('ezplan', JSON.stringify(tasks));
+
+  render();
+
+}
+
+function add() {
+
+  const n = nameInput.value.trim();
+
+  if (!n) {
+
+    alert('Please enter an assignment.');
+
+    return;
+
+  }
+
+  tasks.push({
+
+    n: n,
+
+    c: classInput.value.trim() || 'School',
+
+    d: dateInput.value,
+
+    x: false
+
+  });
+
+  nameInput.value = '';
+
+  classInput.value = '';
+
+  dateInput.value = '';
+
+  save();
+
+}
+
+function toggle(i) {
+
+  tasks[i].x = !tasks[i].x;
+
+  save();
+
+}
+
+function del(i) {
+
+  tasks.splice(i, 1);
+
+  save();
+
+}
+
+function render() {
+
+  list.innerHTML = tasks.length
+
+    ? tasks.map((t, i) => `
+
+      <div class="task">
+
+        <input type="checkbox" ${t.x ? 'checked' : ''} onchange="toggle(${i})">
+
+        <span class="${t.x ? 'done' : ''}">
+
+          <b>${t.n}</b><br>
+
+          <small>${t.c}${t.d ? ' · Due ' + t.d : ''}</small>
+
+        </span>
+
+        <button onclick="del(${i})"
+
+          style="margin-left:auto;border:0;background:none;color:#999">
+
+          Remove
+
+        </button>
+
+      </div>
+
+    `).join('')
+
+    : '<p style="text-align:center;color:#888">No assignments yet — add your first one!</p>';
+
+}
+
 render();
-</script></body></html>
+
+</script>
